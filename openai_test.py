@@ -4,7 +4,7 @@ from openai import OpenAI
 
 # api 키를 가져옴(보안)
 load_dotenv()
-openai_api_key=os.getenv("OPEN_API_KEY")
+openai_api_key=os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key = openai_api_key)
 
@@ -71,6 +71,31 @@ def json_chat():
     print(response.choices[0].message.content)
 
 
+def prompt_chat():
+    MODEL = "gpt-3.5-turbo-1106"
+
+    #시키고 싶은 일. 초기 메세지
+    want_to = """너는 아래 내용을 중심으로 질의응답을 하는 로봇이야.
+                content {}"""
+    content = "여기에 내용을 잘 추가해서 원하는 분야나 방향으로 답을 유도할 수 있음"
+    messages=[
+            {'role': 'system', 'content': want_to.format(content)},
+        ]
+
+
+    user_input = input('You: ')
+    messages.append(
+        {'role': 'user', 'content': user_input},
+    )
+
+    response = ask_to_gpt(messages, MODEL)
+    messages.append(
+        {'role': 'assistant', 'content': response},
+    )
+    print('AI: ', response)
+
+
 basic_chat()
 # completions_chat()
 # json_chat()
+# prompt_chat()
